@@ -1,7 +1,7 @@
 import requests
 import sys
 
-list = [
+errorTexts = [
     "The specified bucket does not exit ",
        "Repository not found ",
        "ERROR\: The request could not be satisfied ",
@@ -61,7 +61,7 @@ def parseResult(target):
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
     req = requests.get(target, headers=headers)
     parsetext = req.text
-    for line in list:
+    for line in errorTexts:
         if line in parsetext:
             return True, target
         else:
