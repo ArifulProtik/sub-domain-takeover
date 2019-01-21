@@ -71,10 +71,12 @@ def parseResult(target):
 
 
 def attack():
-    target = sys.argv[1]
-    if target == "":
+    target = ""
+    if len(sys.argv) < 2:
         print("No target given!")
+        print("USAGE: python subdomain.py https://target.com")
         return
+    target = sys.argv[1]
     vuln, site = parseResult(target)
     if vuln:
         # comment out this line
