@@ -69,7 +69,7 @@ def parseResult(url):
         link = sublink.find('a').text
         targetlink.append(link)
     for target in targetlink:
-        targetparse = requests.get("http//"+target, headers=headers).text
+        targetparse = requests.get("http://"+target, headers=headers).text
         for line in errorTexts:
             if line in targetparse:
                 return True, target
