@@ -58,9 +58,9 @@ errorTexts = [
        "Unrecognized domain <strong> ",
 ]
 
-def parseResult():
+def parseResult(url):
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
-    req = requests.get("https://findsubdomains.com/subdomains-of/github.com", headers=headers)
+    req = requests.get("https://findsubdomains.com/subdomains-of/"+url, headers=headers)
     parsetext = req.text
     soup = BeautifulSoup(parsetext, 'html.parser')
     findingElement=soup.findAll("td", {"data-field": "Domain"})
@@ -69,39 +69,23 @@ def parseResult():
         link = sublink.find('a').text
         targetlink.append(link)
     for target in targetlink:
-        reqtar = requests.get("http"+target, headers=headers).text
+        targetparse = requests.get("http//"+target, headers=headers).text
         for line in errorTexts:
-            if line in reqtar:
+            if line in targetparse:
                 return True, target
-            else:
-                pass
-        
-
-#     for line in errorTexts:
-#         if line in parsetext:
-#             return True, target
-#         else:
-#             pass
-
-#     return False, "No issue found!"
+            return False, target
 
 
-# def attack():
-#     target = ""
-#     if len(sys.argv) < 2:
-#         print("No target given!")
-#         print("USAGE: python subdomain.py https://target.com")
-#         return
-#     target = sys.argv[1]
-#     vuln, site = parseResult(target)
-#     if vuln:
-#         # comment out this line
-#         # if you have a list of targets
-#         # and you need only vulnerable target names
-#         print("YES!")
-#         print(site)
-#         return
-#     print("No issue found!")
+def attack():
+    url = ""
+    if len(sys.argv) < 2:
+        print("No target given!")
+        print("USAGE: python subdomain.py https://target.com")
+        return
+    url = sys.argv[1]
+    vuln, site = parseResult(url)
+    if vuln:
+        print("Potential Vulnerbility Detected:" + site)
+    print("Not Found:" + site)
 
-# attack()
-parseResult()
+attack()
