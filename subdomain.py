@@ -1,5 +1,6 @@
 import requests
 import sys
+from bs4 import BeautifulSoup
 
 errorTexts = [
     "The specified bucket does not exit ",
@@ -57,34 +58,50 @@ errorTexts = [
        "Unrecognized domain <strong> ",
 ]
 
-def parseResult(target):
+def parseResult():
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
-    req = requests.get(target, headers=headers)
+    req = requests.get("https://findsubdomains.com/subdomains-of/github.com", headers=headers)
     parsetext = req.text
-    for line in errorTexts:
-        if line in parsetext:
-            return True, target
-        else:
-            pass
+    soup = BeautifulSoup(parsetext, 'html.parser')
+    findingElement=soup.findAll("td", {"data-field": "Domain"})
+    targetlink = []
+    for sublink in findingElement:
+        link = sublink.find('a').text
+        targetlink.append(link)
+    for target in targetlink:
+        reqtar = requests.get("http"+target, headers=headers).text
+        for line in errorTexts:
+            if line in reqtar:
+                return True, target
+            else:
+                pass
+        
 
-    return False, "No issue found!"
+#     for line in errorTexts:
+#         if line in parsetext:
+#             return True, target
+#         else:
+#             pass
+
+#     return False, "No issue found!"
 
 
-def attack():
-    target = ""
-    if len(sys.argv) < 2:
-        print("No target given!")
-        print("USAGE: python subdomain.py https://target.com")
-        return
-    target = sys.argv[1]
-    vuln, site = parseResult(target)
-    if vuln:
-        # comment out this line
-        # if you have a list of targets
-        # and you need only vulnerable target names
-        print("YES!")
-        print(site)
-        return
-    print("No issue found!")
+# def attack():
+#     target = ""
+#     if len(sys.argv) < 2:
+#         print("No target given!")
+#         print("USAGE: python subdomain.py https://target.com")
+#         return
+#     target = sys.argv[1]
+#     vuln, site = parseResult(target)
+#     if vuln:
+#         # comment out this line
+#         # if you have a list of targets
+#         # and you need only vulnerable target names
+#         print("YES!")
+#         print(site)
+#         return
+#     print("No issue found!")
 
-attack()
+# attack()
+parseResult()
