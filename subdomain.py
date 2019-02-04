@@ -58,16 +58,31 @@ errorTexts = [
        "Unrecognized domain <strong> ",
 ]
 
-def parseResult(url):
+def findsubdomains():
     headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
-    req = requests.get("https://findsubdomains.com/subdomains-of/"+url, headers=headers)
+    try:
+        req = requests.get("https://findsubdomains.com/subdomains-of/github.com", headers=headers, timeout=5)
+    except requests.exceptions.HTTPError:
+        print("Could Not Connect To The Server")
+    except requests.exceptions.ConnectionError:
+        print("Check The Internet Connection")
+    except requests.exceptions.Timeout:
+        print("Your Internet Connection Might Be Slow")
     parsetext = req.text
     soup = BeautifulSoup(parsetext, 'html.parser')
     findingElement=soup.findAll("td", {"data-field": "Domain"})
-    targetlink = []
-    for sublink in findingElement:
-        link = sublink.find('a').text
-        
+    with open('subdomains.txt', 'w') as subdomians:
+        for sublink in findingElement:
+            link = sublink.find('a').text
+            print(link)
+            subdomians.write(link+"\n")
+    subdomians.close()
 
 
+def attack():
+    print("Finding Subdomains Please Wait....")
+    findsubdomains()
+    count = len(open("subdomains.txt").readlines(  ))
+    print("\n"+str(count) + " Subdomain found Saved As subdomains.txt")
 
+attack()
