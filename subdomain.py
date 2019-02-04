@@ -67,25 +67,7 @@ def parseResult(url):
     targetlink = []
     for sublink in findingElement:
         link = sublink.find('a').text
-        targetlink.append(link)
-    for target in targetlink:
-        targetparse = requests.get("http://"+target, headers=headers).text
-        for line in errorTexts:
-            if line in targetparse:
-                return True, target
-            return False, target
+        
 
 
-def attack():
-    url = ""
-    if len(sys.argv) < 2:
-        print("No target given!")
-        print("USAGE: python subdomain.py https://target.com")
-        return
-    url = sys.argv[1]
-    vuln, site = parseResult(url)
-    if vuln:
-        print("Potential Vulnerbility Detected:" + site)
-    print("Not Found:" + site)
 
-attack()
