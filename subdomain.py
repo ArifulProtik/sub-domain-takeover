@@ -57,11 +57,11 @@ errorTexts = [
        "data-html-name ",
        "Unrecognized domain <strong> ",
 ]
+headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
 
-def findsubdomains():
-    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
+def findsubdomains(host):
     try:
-        req = requests.get("https://findsubdomains.com/subdomains-of/github.com", headers=headers, timeout=5)
+        req = requests.get("https://findsubdomains.com/subdomains-of/"+host, headers=headers, timeout=5)
     except requests.exceptions.HTTPError:
         print("Could Not Connect To The Server")
     except requests.exceptions.ConnectionError:
@@ -79,10 +79,26 @@ def findsubdomains():
     subdomians.close()
 
 
-def attack():
+def attack(mainurl):
     print("Finding Subdomains Please Wait....")
-    findsubdomains()
+    findsubdomains(mainurl)
     count = len(open("subdomains.txt").readlines(  ))
     print("\n"+str(count) + " Subdomain found Saved As subdomains.txt")
+    readfile = open('subdomains.txt', 'r')
+    list = readfile.read().split('\n')
+    for target in list:
+        if target == "":
+            continue
+        try:
+            response = requests.get("http://"+target, headers=headers)
+            response.text
+        except requests.exceptions.ConnectionError:
+            continue
+        targetresponse = response.text
+        for err in errorTexts:
+            if err in targetresponse:
+                print("Potential Vulnerbility Detected:" + target)
+                break
+        print("Not Found:" + target)
+    readfile.close()
 
-attack()
