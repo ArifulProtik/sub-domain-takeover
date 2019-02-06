@@ -1,5 +1,7 @@
 import requests
 import sys
+import os
+import argparse
 from bs4 import BeautifulSoup
 
 errorTexts = [
@@ -60,6 +62,7 @@ errorTexts = [
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'}
 
 def findsubdomains(host):
+    banner()
     try:
         req = requests.get("https://findsubdomains.com/subdomains-of/"+host, headers=headers, timeout=5)
     except requests.exceptions.HTTPError:
@@ -84,6 +87,7 @@ def attack(mainurl):
     findsubdomains(mainurl)
     count = len(open("subdomains.txt").readlines(  ))
     print("\n"+str(count) + " Subdomain found Saved As subdomains.txt")
+    print("Now Checking For Vulnerbility....")
     readfile = open('subdomains.txt', 'r')
     list = readfile.read().split('\n')
     for target in list:
@@ -101,4 +105,22 @@ def attack(mainurl):
                 break
         print("Not Found:" + target)
     readfile.close()
-
+def banner():
+    if (os.name in ('ce', 'nt', 'dos')):
+        os.system('cls')
+    elif ('posix' in os.name):
+        os.system('clear')
+    print("               #####################################################")
+    print("               # Tool: Subdomain Takeover vulnerbility Checker     #")
+    print("               # Author:  github.com/ArifulProtik                  #")
+    print("               # Feel Free To Open A Issue If You Need Any Update  #")
+    print("               #####################################################")
+    print("\n")
+def Main():
+    #Initializing Argparser for Further Update
+    parser = argparse.ArgumentParser()
+    parser.add_argument("hostlink", help="Usage python subdomain.py example.com", type= str)
+    args = parser.parse_args()
+    attack(args.hostlink)
+if __name__ == "__main__":
+    Main()
