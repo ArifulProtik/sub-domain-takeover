@@ -15,7 +15,7 @@ But I am willing to make it full featured, which will give you point host with c
 
 ## Devlopment 
 Want To Contribute? 
-Just Frok And And Gimme ME A Pull Request You Are Ready to role. 
+Just Frok And And Gimme  A Pull Request You Are Ready to role. 
 
 ## Contact 
 **Mail: mdarifulislam.protik@gmail.com**
