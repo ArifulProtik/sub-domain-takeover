@@ -21,4 +21,4 @@ Just Fork  And Give me  A Pull Request You Are Ready to role.
 **Mail: mdarifulislam.protik@gmail.com**
 
 
-Meet Me On Twiteer: [![Twitter](https://img.shields.io/badge/twitter-@ArifulProtik-blue.svg)](https://twitter.com/ArifulProtik)
+Meet Me On Twitter: [![Twitter](https://img.shields.io/badge/twitter-@ArifulProtik-blue.svg)](https://twitter.com/ArifulProtik)
