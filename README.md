@@ -5,7 +5,7 @@ thannks for use it.
 
 ## Installation:
     $ pip3 install requests
-    $ pip3 intsall bs4
+    $ pip3 install bs4
 After Installation these two module you ready to rol. :D 
 ## Usage:
     $ python subdomain.py target.com
